@@ -1,0 +1,117 @@
+{
+  "pipeline": {
+    "roleArn": "arn:aws:iam::931486170612:role/AWS-CodePipeline-Service",
+    "stages": [
+      {
+        "name": "Source",
+        "actions": [
+          {
+            "name": "Source",
+            "actionTypeId": {
+              "category": "Source",
+              "owner": "AWS",
+              "provider": "CodeCommit",
+              "version": "1"
+            },
+            "runOrder": 1,
+            "configuration": {
+              "BranchName": "master",
+              "PollForSourceChanges": "true",
+              "RepositoryName": "MyDemoRepo"
+            },
+            "outputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ],
+            "inputArtifacts": []
+          }
+        ]
+      },
+      {
+        "name": "Build",
+        "actions": [
+          {
+            "name": "Build",
+            "actionTypeId": {
+              "category": "Build",
+              "owner": "AWS",
+              "provider": "CodeBuild",
+              "version": "1"
+            },
+            "runOrder": 1,
+            "configuration": {
+              "ProjectName": "MyDemoProject"
+            },
+            "outputArtifacts": [
+              {
+                "name": "BuildArtifact"
+              }
+            ],
+            "inputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Deploy",
+        "actions": [
+          {
+            "name": "DeployStageOne",
+            "actionTypeId": {
+              "category": "Deploy",
+              "owner": "AWS",
+              "provider": "CloudFormation",
+              "version": "1"
+            },
+            "runOrder": 1,
+            "configuration": {
+              "ActionMode": "CHANGE_SET_REPLACE",
+              "Capabilities": "CAPABILITY_IAM",
+              "ChangeSetName": "MyDemoChangeSet",
+              "RoleArn": "arn:aws:iam::931486170612:role/cloudformation-lambda-execution-role",
+              "StackName": "MyDemoStack",
+              "TemplatePath": "BuildArtifact::outputSamTemplate.yaml"
+            },
+            "outputArtifacts": [],
+            "inputArtifacts": [
+              {
+                "name": "BuildArtifact"
+              }
+            ]
+          },
+          {
+            "name": "DeployStageTwo",
+            "actionTypeId": {
+              "category": "Deploy",
+              "owner": "AWS",
+              "provider": "CloudFormation",
+              "version": "1"
+            },
+            "runOrder": 2,
+            "configuration": {
+              "ActionMode": "CHANGE_SET_EXECUTE",
+              "ChangeSetName": "MyDemoChangeSet",
+              "StackName": "MyDemoStack"
+            },
+            "outputArtifacts": [],
+            "inputArtifacts": [
+              {
+                "name": "BuildArtifact"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "artifactStore": {
+      "type": "S3",
+      "location": "codepipeline-eu-west-1-239421588973"
+    },
+    "name": "DrikusDemoTemplatePipeline",
+    "version": 1
+  }
+}

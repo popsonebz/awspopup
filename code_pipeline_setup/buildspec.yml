@@ -1,0 +1,14 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo Installing requirements
+      - sudo apt-get update
+      - sudo apt-get install jq
+      - sudo apt-get install moreutils -y
+  build:
+    commands:
+      - echo Running the bash script
+      - cd infrastructure
+      - ./editTemplate.sh      
+

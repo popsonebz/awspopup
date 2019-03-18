@@ -1,0 +1,8 @@
+{
+    "REPONAME": "TeamXRepo",
+    "PROJECTNAME": "TeamXProject",
+    "SETNAME": "TeamXChangeSet",
+    "STACKNAME": "TeamXStack",
+    "PIPELINENAME": "TeamXPipeline",
+    "IMAGE": "aws/codebuild/nodejs:8.11.0"
+} 

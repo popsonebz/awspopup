@@ -1,0 +1,19 @@
+{
+  "name": "MyDemoProject",
+  "source": {
+    "type": "CODEPIPELINE",
+    "buildspec": ""
+  },
+  "artifacts": {
+    "type": "CODEPIPELINE"
+  },
+  "cache": {
+    "type": "NO_CACHE"
+  },
+  "serviceRole": "arn:aws:iam::931486170612:role/DrikusDemoCodeBuild",
+  "environment": {
+    "type": "LINUX_CONTAINER",
+    "image": "aws/codebuild/python:3.7.1",
+    "computeType": "BUILD_GENERAL1_SMALL"
+  }
+}
